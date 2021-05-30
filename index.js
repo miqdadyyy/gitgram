@@ -1,21 +1,17 @@
+const {Telegraf} = require('telegraf');
+const TelegramService = require('./handlers/telegram');
+const GithubService = require('./handlers/github');
+const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN || 'YOUR_TELEGRAM_BOT_TOKEN');
 /**
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-module.exports = (app) => {
-  // Your code here
+module.exports = (app, {getRouter}) => {
+  TelegramService.init(telegramBot);
+  GithubService.init(app, telegramBot);
+  const webhookRouter = getRouter("/_webhook");
+  webhookRouter.use(require("express").static("public"));
+  webhookRouter.use(telegramBot.webhookCallback('/telegram'));
+
   app.log.info("Yay, the app was loaded!");
-
-  app.on("issues.opened", async (context) => {
-    const issueComment = context.issue({
-      body: "Thanks for opening this issue!",
-    });
-    return context.octokit.issues.createComment(issueComment);
-  });
-
-  // For more information on building apps:
-  // https://probot.github.io/docs/
-
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
 };
