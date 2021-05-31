@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 7003:3000
+    environment:
+      - APP_ID=12345
+      - PRIVATE_KEY=your-private-key
+      - TELEGRAM_BOT_TOKEN=your-telegram-bot-token
+      - FIRESTORE_KEY_PATH=/path/to/firestore-key.json
