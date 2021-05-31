@@ -43,6 +43,9 @@ const TelegramService = class {
           // Send reply message
           ctx.reply('Thank you for inviting me 👌');
         }
+      } else {
+        const name = ctx.message.new_chat_member.first_name;
+        ctx.reply(`Welcome to cmlabs ${name}`);
       }
     });
   }
